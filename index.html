@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reserva de Espaço - IG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Pico CSS (CDN) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top, #f5f7ff 0, #e3e7ff 40%, #d8dde9 100%);
+        padding: 1rem;
+      }
+
+      main {
+        width: 100%;
+      }
+
+      .form-card {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+        background: white;
+      }
+
+      @media (min-width: 768px) {
+        .form-card {
+          padding: 2.5rem 2rem;
+          margin: 2rem auto;
+        }
+
+        .form-grid-2 {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 1rem 1.5rem;
+        }
+      }
+
+      /* Logos */
+      .header-logos {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        gap: 1rem;
+      }
+
+      .header-logos img {
+        max-height: 60px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      @media (min-width: 768px) {
+        .header-logos img {
+          max-height: 80px;
+        }
+      }
+
+      .form-header {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-header h1 {
+        margin-bottom: 0.3rem;
+        font-size: 1.5rem;
+        text-align: center;
+      }
+
+      @media (min-width: 768px) {
+        .form-header h1 {
+          font-size: 2rem;
+        }
+      }
+
+      .form-header p {
+        margin: 0;
+        font-size: 0.9rem;
+        opacity: 0.85;
+      }
+
+      @media (min-width: 768px) {
+        .form-header p {
+          font-size: 0.95rem;
+        }
+      }
+
+      .section-title {
+        margin-top: 1rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+      }
+
+      .required {
+        color: #e11d48;
+        font-weight: 600;
+        margin-left: 0.1rem;
+      }
+
+      .hint {
+        font-size: 0.85rem;
+        opacity: 0.8;
+        margin-top: -0.4rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .footer-note {
+        font-size: 0.8rem;
+        opacity: 0.8;
+        margin-top: 1.5rem;
+        text-align: right;
+      }
+
+      /* Etapas do formulário */
+      .form-step {
+        display: none;
+      }
+
+      .form-step.active {
+        display: block;
+      }
+
+      /* Indicador de progresso */
+      .progress-indicator {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .progress-step {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #64748b;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .progress-step.active {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .progress-step.completed {
+        background: #10b981;
+        color: white;
+      }
+
+      .progress-line {
+        width: 40px;
+        height: 2px;
+        background: #e2e8f0;
+        transition: all 0.3s ease;
+      }
+
+      .progress-line.completed {
+        background: #10b981;
+      }
+
+      @media (min-width: 768px) {
+        .progress-line {
+          width: 80px;
+        }
+      }
+
+      /* Botões de navegação */
+      .form-navigation {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        flex-direction: column;
+      }
+
+      @media (min-width: 768px) {
+        .form-navigation {
+          flex-direction: row;
+          justify-content: space-between;
+        }
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+      }
+
+      @media (min-width: 768px) {
+        .btn-group {
+          flex-direction: row;
+        }
+      }
+
+      button {
+        margin: 0 !important;
+      }
+
+      /* Logo footer */
+      .footer-logo {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .footer-logo img {
+        max-height: 70px;
+        width: auto;
+        object-fit: contain;
+        opacity: 0.8;
+      }
+
+      /* Radios/checkbox em linha */
+      .inline-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .inline-options label {
+        margin-bottom: 0;
+      }
+
+      /* Melhorar espaçamento entre perguntas e opções */
+      .fieldset-group > div {
+        margin-bottom: 1.5rem;
+      }
+
+      .fieldset-group > div:last-child {
+        margin-bottom: 0;
+      }
+
+      .fieldset-group > div > p {
+        margin-bottom: 0.5rem;
+        margin-top: 0;
+        font-weight: 500;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.5rem 1rem;
+      }
+
+      .fieldset-group {
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1rem;
+      }
+
+      .fieldset-group legend {
+        padding: 0 0.4rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        opacity: 0.85;
+      }
+
+      /* Loading spinner */
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 1rem;
+      }
+
+      .loading.active {
+        display: block;
+      }
+
+      .spinner {
+        border: 3px solid #f3f4f6;
+        border-top: 3px solid #3b82f6;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <article class="form-card">
+        <!-- Logos no topo -->
+        <div class="header-logos">
+          <img src="logo-unicamp.png" alt="Logo Unicamp" onerror="this.style.display='none'">
+          <img src="logo-ig.png" alt="Logo IG" onerror="this.style.display='none'">
+        </div>
+
+        <header class="form-header">
+          <h1>Reserva de Espaços no IG</h1>
+          <p>
+            Preencha o formulário abaixo para solicitar a reserva de espaços.
+            Campos marcados com <span class="required">*</span> são obrigatórios.
+          </p>
+        </header>
+
+        <!-- Indicador de progresso (3 etapas) -->
+        <div class="progress-indicator">
+          <div class="progress-step active" data-step="1">1</div>
+          <div class="progress-line"></div>
+          <div class="progress-step" data-step="2">2</div>
+          <div class="progress-line"></div>
+          <div class="progress-step" data-step="3">3</div>
+        </div>
+
+        <form id="reservaForm">
+          <!-- ==================== ETAPA 1 ==================== -->
+          <div class="form-step active" data-step="1">
+            <p class="section-title">1. Datas e horários do evento</p>
+
+            <!-- E-mail -->
+            <label for="email">
+              E-mail <span class="required">*</span>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="seu.email@exemplo.com"
+                required
+              />
+            </label>
+            <p class="hint">Use um e-mail válido para contato com a organização.</p>
+
+            <!-- Datas -->
+            <div class="form-grid-2">
+              <label for="data_inicio">
+                Data Início <span class="required">*</span>
+                <input
+                  type="date"
+                  id="data_inicio"
+                  name="data_inicio"
+                  required
+                />
+              </label>
+
+              <label for="data_termino">
+                Data Término <span class="required">*</span>
+                <input
+                  type="date"
+                  id="data_termino"
+                  name="data_termino"
+                  required
+                />
+              </label>
+            </div>
+
+            <!-- Horário do evento -->
+            <fieldset class="fieldset-group">
+              <legend>Horário do evento <span class="required">*</span></legend>
+              <div class="form-grid-2">
+                <label for="hora_evento_inicio">
+                  Início
+                  <select id="hora_evento_inicio" name="hora_evento_inicio" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option>07:00</option>
+                    <option>07:30</option>
+                    <option>08:00</option>
+                    <option>08:30</option>
+                    <option>09:00</option>
+                    <option>09:30</option>
+                    <option>10:00</option>
+                    <option>10:30</option>
+                    <option>11:00</option>
+                    <option>11:30</option>
+                    <option>12:00</option>
+                    <option>12:30</option>
+                    <option>13:00</option>
+                    <option>13:30</option>
+                    <option>14:00</option>
+                    <option>14:30</option>
+                    <option>15:00</option>
+                    <option>15:30</option>
+                    <option>16:00</option>
+                    <option>16:30</option>
+                    <option>17:00</option>
+                    <option>17:30</option>
+                    <option>18:00</option>
+                    <option>18:30</option>
+                    <option>19:00</option>
+                  </select>
+                </label>
+
+                <label for="hora_evento_termino">
+                  Término
+                  <select id="hora_evento_termino" name="hora_evento_termino" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option>07:00</option>
+                    <option>07:30</option>
+                    <option>08:00</option>
+                    <option>08:30</option>
+                    <option>09:00</option>
+                    <option>09:30</option>
+                    <option>10:00</option>
+                    <option>10:30</option>
+                    <option>11:00</option>
+                    <option>11:30</option>
+                    <option>12:00</option>
+                    <option>12:30</option>
+                    <option>13:00</option>
+                    <option>13:30</option>
+                    <option>14:00</option>
+                    <option>14:30</option>
+                    <option>15:00</option>
+                    <option>15:30</option>
+                    <option>16:00</option>
+                    <option>16:30</option>
+                    <option>17:00</option>
+                    <option>17:30</option>
+                    <option>18:00</option>
+                    <option>18:30</option>
+                    <option>19:00</option>
+                    <option>19:30</option>
+                    <option>20:00</option>
+                    <option>20:30</option>
+                    <option>21:00</option>
+                    <option>21:30</option>
+                    <option>22:00</option>
+                    <option>22:30</option>
+                  </select>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Montagem e desmontagem -->
+            <fieldset class="fieldset-group">
+              <legend>Montagem e desmontagem do evento <span class="required">*</span></legend>
+              <div class="form-grid-2">
+                <label for="hora_montagem_inicio">
+                  Início
+                  <select id="hora_montagem_inicio" name="hora_montagem_inicio" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option>07:00</option>
+                    <option>07:30</option>
+                    <option>08:00</option>
+                    <option>08:30</option>
+                    <option>09:00</option>
+                    <option>09:30</option>
+                    <option>10:00</option>
+                    <option>10:30</option>
+                    <option>11:00</option>
+                    <option>11:30</option>
+                    <option>12:00</option>
+                    <option>12:30</option>
+                    <option>13:00</option>
+                    <option>13:30</option>
+                    <option>14:00</option>
+                    <option>14:30</option>
+                    <option>15:00</option>
+                    <option>15:30</option>
+                    <option>16:00</option>
+                    <option>16:30</option>
+                    <option>17:00</option>
+                    <option>17:30</option>
+                    <option>18:00</option>
+                    <option>18:30</option>
+                    <option>19:00</option>
+                  </select>
+                </label>
+
+                <label for="hora_montagem_termino">
+                  Término
+                  <select id="hora_montagem_termino" name="hora_montagem_termino" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option>07:00</option>
+                    <option>07:30</option>
+                    <option>08:00</option>
+                    <option>08:30</option>
+                    <option>09:00</option>
+                    <option>09:30</option>
+                    <option>10:00</option>
+                    <option>10:30</option>
+                    <option>11:00</option>
+                    <option>11:30</option>
+                    <option>12:00</option>
+                    <option>12:30</option>
+                    <option>13:00</option>
+                    <option>13:30</option>
+                    <option>14:00</option>
+                    <option>14:30</option>
+                    <option>15:00</option>
+                    <option>15:30</option>
+                    <option>16:00</option>
+                    <option>16:30</option>
+                    <option>17:00</option>
+                    <option>17:30</option>
+                    <option>18:00</option>
+                    <option>18:30</option>
+                    <option>19:00</option>
+                    <option>19:30</option>
+                    <option>20:00</option>
+                    <option>20:30</option>
+                    <option>21:00</option>
+                    <option>21:30</option>
+                    <option>22:00</option>
+                    <option>22:30</option>
+                  </select>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Navegação Etapa 1 -->
+            <div class="form-navigation">
+              <div class="btn-group">
+                <button type="button" class="secondary" onclick="limparFormulario()">
+                  Limpar campos
+                </button>
+              </div>
+              <div class="btn-group">
+                <button type="button" onclick="proximaEtapa()">
+                  Avançar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================== ETAPA 2 ==================== -->
+          <div class="form-step" data-step="2">
+            <p class="section-title">2. Informações sobre o evento</p>
+
+            <!-- Nome do evento -->
+            <label for="nome_evento">
+              Nome do evento <span class="required">*</span>
+              <input
+                type="text"
+                id="nome_evento"
+                name="nome_evento"
+                placeholder="Ex.: Semana de Integração do IG"
+                required
+              />
+            </label>
+
+            <!-- Local -->
+            <fieldset class="fieldset-group">
+              <legend>Local(is) do evento <span class="required">*</span></legend>
+              <p class="hint">Selecione um ou mais locais conforme a necessidade do evento.</p>
+              <div class="inline-options">
+                <label>
+                  <input type="checkbox" name="local" value="Auditório Milton Santos" required />
+                  Auditório Milton Santos
+                </label>
+                <label>
+                  <input type="checkbox" name="local" value="Saguão 01 (ao lado do Auditório)" />
+                  Saguão 01 (ao lado do Auditório)
+                </label>
+                <label>
+                  <input type="checkbox" name="local" value="Saguão 02 (acesso pelo centro acadêmico)" />
+                  Saguão 02 (acesso pelo centro acadêmico)
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Público estimado -->
+            <label for="publico_estimado">
+              Público estimado para este evento <span class="required">*</span>
+              <input
+                type="number"
+                id="publico_estimado"
+                name="publico_estimado"
+                min="50"
+                max="214"
+                placeholder="Entre 50 e 214 pessoas"
+                required
+              />
+            </label>
+            <p class="hint">O evento deve aceitar entre 50 e 214 pessoas.</p>
+
+            <!-- Breve descrição -->
+            <label for="descricao">
+              Breve descrição do evento <span class="required">*</span>
+              <textarea
+                id="descricao"
+                name="descricao"
+                rows="5"
+                placeholder="Descreva o objetivo do evento, público-alvo, atividades previstas e, se possível, inclua o link do evento."
+                required
+              ></textarea>
+            </label>
+            <p class="hint">
+              Se possível, inclua o link do evento (site, rede social, formulário de inscrição etc.).
+            </p>
+
+            <!-- Navegação Etapa 2 -->
+            <div class="form-navigation">
+              <div class="btn-group">
+                <button type="button" class="secondary" onclick="etapaAnterior()">
+                  Voltar
+                </button>
+              </div>
+              <div class="btn-group">
+                <button type="button" onclick="proximaEtapa()">
+                  Avançar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==================== ETAPA 3 ==================== -->
+          <div class="form-step" data-step="3">
+            <p class="section-title">3. Organização, serviços e declaração</p>
+
+            <!-- Organização: entidade promotora -->
+            <label for="entidade_promotora">
+              Entidade promotora do evento <span class="required">*</span>
+              <input
+                type="text"
+                id="entidade_promotora"
+                name="entidade_promotora"
+                placeholder="Ex.: Instituto de Geociências - Unicamp"
+                required
+              />
+            </label>
+
+            <!-- Contato da organização/promotora -->
+            <fieldset class="fieldset-group">
+              <legend>Contato da organização/promotora do evento (opcional)</legend>
+              <p class="hint">Preencha os dados de contato da pessoa responsável pela organização/promotora do evento.</p>
+              <div class="form-grid-2">
+                <label for="coordenador_nome">
+                  Nome
+                  <input
+                    type="text"
+                    id="coordenador_nome"
+                    name="coordenador_nome"
+                  />
+                </label>
+
+                <label for="coordenador_email">
+                  E-mail
+                  <input
+                    type="email"
+                    id="coordenador_email"
+                    name="coordenador_email"
+                  />
+                </label>
+              </div>
+              <label for="coordenador_telefone">
+                Telefone
+                <input
+                  type="tel"
+                  id="coordenador_telefone"
+                  name="coordenador_telefone"
+                />
+              </label>
+            </fieldset>
+
+            <!-- Sobre o evento: SIM/NÃO -->
+            <fieldset class="fieldset-group">
+              <legend>Sobre o evento <span class="required">*</span></legend>
+
+              <div>
+                <p>Haverão expositores no evento?</p>
+                <div class="inline-options">
+                  <label>
+                    <input type="radio" name="haverao_expositores" value="Sim" required />
+                    Sim
+                  </label>
+                  <label>
+                    <input type="radio" name="haverao_expositores" value="Não" />
+                    Não
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <p>Evento possui patrocínio?</p>
+                <div class="inline-options">
+                  <label>
+                    <input type="radio" name="evento_patrocinio" value="Sim" required />
+                    Sim
+                  </label>
+                  <label>
+                    <input type="radio" name="evento_patrocinio" value="Não" />
+                    Não
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <p>Evento possui inscrição paga?</p>
+                <div class="inline-options">
+                  <label>
+                    <input type="radio" name="evento_inscricao_paga" value="Sim" required />
+                    Sim
+                  </label>
+                  <label>
+                    <input type="radio" name="evento_inscricao_paga" value="Não" />
+                    Não
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Serviços Multimídia & Informática -->
+            <fieldset class="fieldset-group">
+              <legend>Serviços Multimídia &amp; Informática</legend>
+              <p class="hint">Marque os serviços necessários para o evento.</p>
+
+              <div class="grid-3">
+                <label>
+                  <input type="checkbox" name="servicos_multimidia" value="Projeção no telão" />
+                  Projeção no telão
+                </label>
+                <label>
+                  <input type="checkbox" name="servicos_multimidia" value="Gravação (contratada pelo evento)" />
+                  Gravação (contratada pelo evento)
+                </label>
+                <label>
+                  <input type="checkbox" name="servicos_multimidia" value="Streaming: canal do YouTube" />
+                  Streaming: canal do YouTube
+                </label>
+                <label>
+                  <input type="checkbox" name="servicos_multimidia" value="Atividade híbrida" />
+                  Atividade híbrida (consultar disponibilidade)
+                </label>
+                <label>
+                  <input type="checkbox" name="servicos_multimidia" value="Rede Wi-fi (eduroam)" />
+                  Rede Wi-fi (rede eduroam)
+                </label>
+                <label>
+                  <input type="checkbox" name="servicos_multimidia" value="Nenhum" />
+                  Nenhum
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Prestadores de Serviços -->
+            <fieldset class="fieldset-group">
+              <legend>Prestadores de serviços</legend>
+              <p class="hint">Marque os serviços contratados para apoio ao evento.</p>
+
+              <div class="grid-3">
+                <label>
+                  <input type="checkbox" name="prestadores_servico" value="Buffet contratado" />
+                  Buffet contratado (não há copa de apoio)
+                </label>
+                <label>
+                  <input type="checkbox" name="prestadores_servico" value="Stands para empresas" />
+                  Stands para empresas
+                </label>
+                <label>
+                  <input type="checkbox" name="prestadores_servico" value="Expositores para banners" />
+                  Expositores para banners
+                </label>
+                <label>
+                  <input type="checkbox" name="prestadores_servico" value="Gravação" />
+                  Gravação
+                </label>
+                <label>
+                  <input type="checkbox" name="prestadores_servico" value="Tradução simultânea" />
+                  Tradução simultânea
+                </label>
+                <label>
+                  <input type="checkbox" name="prestadores_servico" value="Floricultura" />
+                  Floricultura
+                </label>
+                <label>
+                  <input type="checkbox" name="prestadores_servico" value="Nenhum" />
+                  Nenhum
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Declaração de responsabilidade -->
+            <fieldset class="fieldset-group">
+              <legend>Declaração de responsabilidade <span class="required">*</span></legend>
+              <p>
+                Declaro que as informações aqui apresentadas são verdadeiras e que sou responsável pelo evento.
+              </p>
+              <label>
+                <input
+                  type="checkbox"
+                  id="declaracao_responsabilidade"
+                  name="declaracao_responsabilidade"
+                  value="Aceito"
+                  required
+                />
+                Estou de acordo com a declaração acima.
+              </label>
+            </fieldset>
+
+            <!-- Navegação Etapa 3 -->
+            <div class="form-navigation">
+              <div class="btn-group">
+                <button type="button" class="secondary" onclick="etapaAnterior()">
+                  Voltar
+                </button>
+              </div>
+              <div class="btn-group">
+                <button type="submit">
+                  Enviar solicitação
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading -->
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Enviando sua solicitação...</p>
+          </div>
+
+          <p class="footer-note">
+            Formulário de reserva de espaços – IG
+          </p>
+        </form>
+      </article>
+    </main>
+
+        <script>
+      const TOTAL_ETAPAS = 3;
+      let etapaAtual = 1;
+
+      // Navegação entre etapas
+      function proximaEtapa() {
+        if (!validarEtapa(etapaAtual)) {
+          return;
+        }
+        if (etapaAtual < TOTAL_ETAPAS) {
+          etapaAtual++;
+          atualizarEtapa();
+        }
+      }
+
+      function etapaAnterior() {
+        if (etapaAtual > 1) {
+          etapaAtual--;
+          atualizarEtapa();
+        }
+      }
+
+      function atualizarEtapa() {
+        // Atualizar visibilidade das etapas
+        const steps = document.querySelectorAll('.form-step');
+        steps.forEach(step => {
+          step.classList.remove('active');
+        });
+
+        const seletorEtapa = '.form-step[data-step="' + etapaAtual + '"]';
+        const etapaEl = document.querySelector(seletorEtapa);
+        if (etapaEl) {
+          etapaEl.classList.add('active');
+        }
+
+        // Atualizar indicador de progresso
+        const progressSteps = document.querySelectorAll('.progress-step');
+        progressSteps.forEach(step => {
+          const stepNumber = parseInt(step.getAttribute('data-step'), 10);
+          step.classList.remove('active', 'completed');
+
+          if (stepNumber < etapaAtual) {
+            step.classList.add('completed');
+          } else if (stepNumber === etapaAtual) {
+            step.classList.add('active');
+          }
+        });
+
+        const progressLines = document.querySelectorAll('.progress-line');
+        progressLines.forEach((line, index) => {
+          if (index < etapaAtual - 1) {
+            line.classList.add('completed');
+          } else {
+            line.classList.remove('completed');
+          }
+        });
+
+        // Scroll para o topo
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function validarEtapa(etapa) {
+        const seletor = '.form-step[data-step="' + etapa + '"]';
+        const stepElement = document.querySelector(seletor);
+        if (!stepElement) return true;
+
+        // Validação especial para checkboxes de local (pelo menos um deve estar marcado)
+        if (etapa === 2) {
+          const locaisCheckboxes = stepElement.querySelectorAll('input[name="local"]');
+          const algumMarcado = Array.from(locaisCheckboxes).some(cb => cb.checked);
+
+          if (!algumMarcado) {
+            alert('Por favor, selecione pelo menos um local para o evento.');
+            locaisCheckboxes[0].focus();
+            return false;
+          }
+        }
+
+        const inputs = stepElement.querySelectorAll(
+          'input[required], select[required], textarea[required]'
+        );
+
+        for (let i = 0; i < inputs.length; i++) {
+          const input = inputs[i];
+
+          // Pular validação dos checkboxes de local, já validamos acima
+          if (input.name === 'local' && input.type === 'checkbox') {
+            continue;
+          }
+
+          if (!input.checkValidity()) {
+            input.reportValidity();
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      function limparFormulario() {
+        if (confirm('Tem certeza que deseja limpar todos os campos?')) {
+          const form = document.getElementById('reservaForm');
+          form.reset();
+          etapaAtual = 1;
+          atualizarEtapa();
+        }
+      }
+
+      // Envio do formulário
+      document.getElementById('reservaForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        if (!validarEtapa(TOTAL_ETAPAS)) {
+          return;
+        }
+
+        // Esconder etapas e mostrar loading
+        document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
+        document.querySelector('.loading').classList.add('active');
+
+        // Coletar dados do formulário (tratando múltiplos valores de checkbox)
+        const formData = new FormData(this);
+        const dados = {};
+
+        formData.forEach((value, key) => {
+          if (dados[key]) {
+            if (Array.isArray(dados[key])) {
+              dados[key].push(value);
+            } else {
+              dados[key] = [dados[key], value];
+            }
+          } else {
+            dados[key] = value;
+          }
+        });
+
+        // Se houver arrays (checkboxes), junta em string
+        Object.keys(dados).forEach(key => {
+          if (Array.isArray(dados[key])) {
+            dados[key] = dados[key].join(', ');
+          }
+        });
+
+        try {
+          await fetch(
+            'https://script.google.com/macros/s/AKfycby2xJr-XpvXQ9qhxw25H4TkEDf4zIVsfa2Ws2mW6X0oyz7yKk74AxaaxmHkgp2AKA47zw/exec',
+            {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(dados)
+            }
+          );
+
+          // Ocultar loading
+          document.querySelector('.loading').classList.remove('active');
+
+          // Mensagem de sucesso
+          alert(
+            '✅ Formulário enviado com sucesso!\n\nSua solicitação de reserva foi recebida e será analisada em breve.\n\nObrigado!'
+          );
+
+          // Limpar e resetar formulário
+          this.reset();
+          etapaAtual = 1;
+          atualizarEtapa();
+        } catch (error) {
+          document.querySelector('.loading').classList.remove('active');
+          etapaAtual = TOTAL_ETAPAS;
+          atualizarEtapa();
+
+          alert(
+            '❌ Erro ao enviar formulário.\n\nPor favor, tente novamente mais tarde ou entre em contato diretamente.'
+          );
+          console.error('Erro:', error);
+        }
+      });
+    </script>
+
+  </body>
+</html>
